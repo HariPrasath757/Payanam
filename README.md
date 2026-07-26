@@ -44,11 +44,12 @@ Configured for **Firebase App Hosting** with automatic synchronization between t
 
 ## Screenshots
 
-<img width="376" height="367" alt="image" src="https://github.com/user-attachments/assets/89764dd8-f55f-47e6-8aae-eb2c8dee773f" />
+<img width="1308" height="658" alt="image" src="https://github.com/user-attachments/assets/5a8382fd-e0d1-4a83-9bfe-c632248af629" />
 
-<img width="393" height="445" alt="image" src="https://github.com/user-attachments/assets/f49749fe-847d-4e51-8f6e-33230c812cca" />
+<img width="1321" height="657" alt="image" src="https://github.com/user-attachments/assets/35c09d63-0820-4b0a-ac0d-79781e53c01f" />
 
-<img width="1600" height="862" alt="image" src="https://github.com/user-attachments/assets/907f8bf5-12a6-44f2-b91c-5501634e2d5c" />
+<img width="1302" height="653" alt="image" src="https://github.com/user-attachments/assets/8b4e8fb5-dfc2-40fd-9a7b-b65d4ca39a5f" />
 
-<img width="1600" height="847" alt="image" src="https://github.com/user-attachments/assets/c247742c-1d2f-4b2e-b81d-e0e088da72de" />
+<img width="393" height="445" alt="image" src="https://github.com/user-attachments/assets/6e679938-8539-48e1-b95d-b51a48bb905c" />
 
+<img width="1281" height="943" alt="image" src="https://github.com/user-attachments/assets/cd68040e-8b31-4d2c-a2bb-7f46a8a423b0" />
