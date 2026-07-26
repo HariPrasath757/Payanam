@@ -41,3 +41,14 @@ Payanam is a real-time, interactive bus tracking and simulation system designed 
 
 ## Deployment
 Configured for **Firebase App Hosting** with automatic synchronization between the browser-based simulation and the production database.
+
+## Screenshots
+
+<img width="376" height="367" alt="image" src="https://github.com/user-attachments/assets/89764dd8-f55f-47e6-8aae-eb2c8dee773f" />
+
+<img width="393" height="445" alt="image" src="https://github.com/user-attachments/assets/f49749fe-847d-4e51-8f6e-33230c812cca" />
+
+<img width="1600" height="862" alt="image" src="https://github.com/user-attachments/assets/907f8bf5-12a6-44f2-b91c-5501634e2d5c" />
+
+<img width="1600" height="847" alt="image" src="https://github.com/user-attachments/assets/c247742c-1d2f-4b2e-b81d-e0e088da72de" />
+
