@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * PAYANAM SIMULATION SYSTEM - SECURITY RULES
+     *
+     * Updated for client-side simulation prototype.
+     * Allows public read/write access to core collections so the browser-based
+     * simulation can update bus positions and passenger counts in real-time.
+     */
+
+    match /routes/{routeId} {
+      allow read, write: if true;
+    }
+
+    match /stops/{stopId} {
+      allow read, write: if true;
+    }
+
+    match /buses/{busId} {
+      allow read, write: if true;
+    }
+  }
+}

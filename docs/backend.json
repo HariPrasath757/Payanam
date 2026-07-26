@@ -1,0 +1,207 @@
+{
+  "entities": {
+    "Bus": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Bus",
+      "type": "object",
+      "description": "Represents a single bus operating within the simulation system, tracking its real-time status and passenger information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Bus entity."
+        },
+        "routeId": {
+          "type": "string",
+          "description": "Reference to the Route this bus is currently assigned to. (Relationship: Route 1:N Bus)"
+        },
+        "licensePlate": {
+          "type": "string",
+          "description": "Unique identifier for the physical bus vehicle, e.g., license plate number."
+        },
+        "currentLatitude": {
+          "type": "number",
+          "description": "The current geographical latitude of the bus."
+        },
+        "currentLongitude": {
+          "type": "number",
+          "description": "The current geographical longitude of the bus."
+        },
+        "currentOccupancy": {
+          "type": "number",
+          "description": "The current number of passengers inside the bus. This value is dynamically simulated."
+        },
+        "direction": {
+          "type": "string",
+          "description": "The current simulated direction of travel for the bus on its route (e.g., 'forward' or 'backward')."
+        },
+        "speedKmH": {
+          "type": "number",
+          "description": "The constant simulated speed of the bus in kilometers per hour."
+        },
+        "lastReportedAt": {
+          "type": "string",
+          "description": "Timestamp of the last time the bus's position and status were updated.",
+          "format": "date-time"
+        },
+        "nextStopId": {
+          "type": "string",
+          "description": "Reference to the next Stop the bus is scheduled to arrive at. (Relationship: Stop 1:N Bus)"
+        },
+        "lastStopId": {
+          "type": "string",
+          "description": "Reference to the last Stop the bus departed from. (Relationship: Stop 1:N Bus)"
+        }
+      },
+      "required": [
+        "id",
+        "routeId",
+        "currentLatitude",
+        "currentLongitude",
+        "currentOccupancy",
+        "direction",
+        "speedKmH",
+        "lastReportedAt",
+        "nextStopId"
+      ]
+    },
+    "Route": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Route",
+      "type": "object",
+      "description": "Defines a bus route, including its name, description, ordered stops, and geographical path for visualization.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Route entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the route (e.g., \"Express Line 1\")."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the route, including its start and end points."
+        },
+        "stopOrderForward": {
+          "type": "array",
+          "description": "An ordered list of Stop IDs representing the sequence of stops for the 'forward' direction of the route. (Relationship: Route N:N Stop via ordered list)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stopOrderBackward": {
+          "type": "array",
+          "description": "An ordered list of Stop IDs representing the sequence of stops for the 'backward' direction of the route. This typically mirrors the forward path but can be distinct. (Relationship: Route N:N Stop via ordered list)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "polylineEncoded": {
+          "type": "string",
+          "description": "An encoded polyline string (e.g., Google Encoded Polyline Algorithm Format) representing the geographical path of the route for visualization on a map."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "stopOrderForward",
+        "stopOrderBackward",
+        "polylineEncoded"
+      ]
+    },
+    "Stop": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Stop",
+      "type": "object",
+      "description": "Represents a bus stop, including its location and the current number of waiting passengers.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Stop entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the bus stop (e.g., \"Main Street Station\")."
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Geographical latitude of the bus stop."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Geographical longitude of the bus stop."
+        },
+        "waitingPassengers": {
+          "type": "number",
+          "description": "The current simulated number of passengers waiting at this stop for any bus. This value is updated by the simulation."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "latitude",
+        "longitude",
+        "waitingPassengers"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/routes/{routeId}",
+        "definition": {
+          "entityName": "Route",
+          "schema": {
+            "$ref": "#/backend/entities/Route"
+          },
+          "description": "Stores the static definition of a bus route, including its name, description, ordered stops, and geographical polyline. Publicly readable for all users. Writes are restricted to the simulation backend or administrative tools.",
+          "params": [
+            {
+              "name": "routeId",
+              "description": "Unique identifier for the Route."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/stops/{stopId}",
+        "definition": {
+          "entityName": "Stop",
+          "schema": {
+            "$ref": "#/backend/entities/Stop"
+          },
+          "description": "Contains information about a bus stop, its geographical coordinates, and the real-time simulated number of waiting passengers. This collection is publicly readable. The 'waitingPassengers' field is dynamically updated by the simulation backend using atomic operations to ensure accuracy.",
+          "params": [
+            {
+              "name": "stopId",
+              "description": "Unique identifier for the Stop."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/buses/{busId}",
+        "definition": {
+          "entityName": "Bus",
+          "schema": {
+            "$ref": "#/backend/entities/Bus"
+          },
+          "description": "Holds the real-time status of each bus, including its current location, occupancy, direction, and speed. This data is publicly readable for real-time tracking. All updates to bus position and occupancy are performed exclusively by the simulation backend.",
+          "params": [
+            {
+              "name": "busId",
+              "description": "Unique identifier for the Bus."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The recommended Firestore structure for the Payanam system prioritizes public readability for all real-time simulation data (`Bus`, `Stop`) and static configuration (`Route`), while strictly enforcing backend-only write access. All core entities are placed in top-level collections: `/routes`, `/stops`, and `/buses`. This design achieves **Authorization Independence** by ensuring no document's access permissions depend on fetching data from another document (i.e., no `get()` calls are necessary in security rules for authorization). Since the simulation backend uses the Firebase Admin SDK, it inherently bypasses security rules for write operations, further simplifying the authorization model. For **QAPs (Rules are not Filters)**, this structure allows for simple and efficient security rules. All documents within `/routes`, `/stops`, and `/buses` share the same security posture – public read access. This means `list` operations on these collections can return all documents, and client-side filtering (e.g., displaying only relevant buses based on direction) occurs in the application logic, not via Firestore security rules. This radical segregation ensures homogeneous security requirements within each collection, making rules explicit, robust, and easy to debug."
+  }
+}
